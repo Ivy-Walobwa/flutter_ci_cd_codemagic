@@ -6,7 +6,9 @@ import '../utils/author_service.dart';
 import 'package:http/http.dart' as http;
 
 class AuthorListScreen extends StatefulWidget {
-  const AuthorListScreen({Key? key}) : super(key: key);
+  final AuthorService authorService;
+
+  const AuthorListScreen({Key? key, required this.authorService}) : super(key: key);
 
   @override
   State<AuthorListScreen> createState() => _AuthorListScreenState();
@@ -29,6 +31,7 @@ class _AuthorListScreenState extends State<AuthorListScreen> {
             return ListView.builder(
               key: kAuthorListKey,
               itemBuilder: (ctx, index) => ListTile(
+                key: Key(authors[index].id),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -43,7 +46,9 @@ class _AuthorListScreenState extends State<AuthorListScreen> {
             );
           }
           if(snapshot.hasError){
-            return Center(child: Text(snapshot.error.toString()),);
+            return Center(
+              key: kErrorKey,
+              child: Text(snapshot.error.toString()),);
           }
           return const Center(child: CircularProgressIndicator(),);
 
@@ -55,6 +60,6 @@ class _AuthorListScreenState extends State<AuthorListScreen> {
   @override
   void initState() {
     super.initState();
-    futureAuthorsList = AuthorService.instance.getAuthors(http.Client());
+    futureAuthorsList =widget.authorService.getAuthors(http.Client());
   }
 }

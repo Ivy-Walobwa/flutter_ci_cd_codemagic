@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'presentation/author_list_screen.dart';
+import 'utils/author_service.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const AuthorListScreen(),
+      home:  AuthorListScreen(authorService: AuthorService.instance,),
     );
   }
 }

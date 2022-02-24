@@ -7,7 +7,6 @@ class AuthorDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Author Profile'),
@@ -35,9 +34,11 @@ class AuthorDetailScreen extends StatelessWidget {
                     style: Theme.of(context).textTheme.headline2,
                   ),
                 ),
-                Text(author.description,
-                    style: Theme.of(context).textTheme.headline5),
-
+                Text(
+                  author.description,
+                  key: Key('detail${author.id}'),
+                  style: Theme.of(context).textTheme.headline5,
+                ),
               ],
             ),
           ),
