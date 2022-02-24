@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import '../models/author.dart';
 
 class AuthorDetailScreen extends StatelessWidget {
-  const AuthorDetailScreen({Key? key}) : super(key: key);
+  final Author author;
+  const AuthorDetailScreen({Key? key, required this.author}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class AuthorDetailScreen extends StatelessWidget {
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: NetworkImage(
-                        "https://images.quotable.dev/profile/400/a-p-j-abdul-kalam.jpg"),
+                        "https://images.quotable.dev/profile/400/${author.slug}.jpg"),
                     fit: BoxFit.fill)),
           ),
           Padding(
@@ -32,11 +34,11 @@ class AuthorDetailScreen extends StatelessWidget {
                 FittedBox(
                   fit: BoxFit.contain,
                   child: Text(
-                    'Name',
+                    author.name,
                     style: Theme.of(context).textTheme.headline2,
                   ),
                 ),
-                Text('Description',
+                Text(author.description,
                     style: Theme.of(context).textTheme.headline5),
 
               ],
