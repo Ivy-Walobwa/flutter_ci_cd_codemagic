@@ -8,9 +8,6 @@ class AuthorDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    const  Widget spacing =  SizedBox(
-      height: 18,
-    );
     return Scaffold(
       appBar: AppBar(
         title: const Text('Author Profile'),
