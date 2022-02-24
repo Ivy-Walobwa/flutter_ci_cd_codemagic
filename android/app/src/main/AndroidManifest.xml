@@ -2,7 +2,7 @@
     package="com.walobwa.flutter_cicd_codemagic">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="flutter_cicd_codemagic"
+        android:label="Author List"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
