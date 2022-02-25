@@ -52,7 +52,7 @@ android {
         applicationId "com.walobwa.flutter_cicd_codemagic"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
-        versionCode flutterVersionCode.toInteger()
+        versionCode flutterVersionCode.()
         versionName "1.0.1"
     }
 
