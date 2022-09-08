@@ -1,0 +1,64 @@
+workflows:
+  default-workflow:
+    name: Default Workflow
+    max_build_duration: 60
+    environment:
+      vars:
+        DOPPLER_ENV: codemagic
+        DOPPLER_TOKEN: Encrypted(Z0FBQUFBQmpHWEtjeU1EdjdpSWs4WWE3QTBockpLUDNzY25UakVPcjlGckNhMmF5WURJbC1Kek84YmRjWW5WY1M4UGlyVmtodVo4NUdqXzVFSGlTbEVCSlhCQkxHeU4wcFdSaS1yMThYalM2SUdSeldIelpJcDVWSU00aldyMll4QXJoYWNVZmNzWWxxSDM5YTBkNkM1MEhKaUh1SC1HMDh3PT0=)
+      flutter: default
+      xcode: latest
+      cocoapods: default
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: '*'
+          include: true
+          source: true
+      tag_patterns:
+        - pattern: '*'
+          include: true
+    scripts:
+      - |
+        # set up debug keystore
+        rm -f ~/.android/debug.keystore
+        keytool -genkeypair \
+          -alias androiddebugkey \
+          -keypass android \
+          -keystore ~/.android/debug.keystore \
+          -storepass android \
+          -dname 'CN=Android Debug,O=Android,C=US' \
+          -keyalg 'RSA' \
+          -keysize 2048 \
+          -validity 10000
+      - |
+        # set up local properties
+        echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
+      - |
+        - name: Install Doppler on MacOS
+          script: |
+            brew install gnupg
+            brew install dopplerhq/cli/doppler
+      - flutter packages pub get
+      - flutter config --enable-web
+      - doppler secrets download --no-read-env --no-file --format env-no-quotes --config
+        $DOPPLER_ENV --token $DOPPLER_TOKEN >> $CM_ENV
+      - flutter build appbundle --release --dart-define=MOVIE_DB_API_KEY=$MOVIE_DB_API_KEY --dart-define=MOVIE_DB_BASE_URL=$MOVIE_DB_BASE_URL
+      - |
+        # build web
+        flutter build web --release --dart-define=MOVIE_DB_API_KEY=$MOVIE_DB_API_KEY --dart-define=MOVIE_DB_BASE_URL=$MOVIE_DB_BASE_URL
+        cd build/web
+        7z a -r ../web.zip ./*
+    artifacts:
+      - build/**/outputs/apk/**/*.apk
+      - build/**/outputs/bundle/**/*.aab
+      - build/**/outputs/**/mapping.txt
+      - build/web.zip
+      - '*.snap'
+      - build/windows/**/*.msix
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - ivywalobwa@gmail.com
